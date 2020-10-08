@@ -1,0 +1,6 @@
+10/8 
+- Requirements.txt did not install Psycopg2-binary. Need to do a seperate install
+
+
+
+-Initialized project. Needed to alter trivia.psql to reflect a new Owner.
