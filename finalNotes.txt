@@ -1,6 +1,5 @@
 10/8 
-- Requirements.txt did not install Psycopg2-binary. Need to do a seperate install
+- Project did not work unless I removed all version dependencies from the requirements.txt file. Specifically Psycopg2-binary and Werkzeug were producing errors at the desired version
 
 
-
--Initialized project. Needed to alter trivia.psql to reflect a new Owner.
+-Needed to alter trivia.psql to reflect a new Owner: postgres (my DB username).
