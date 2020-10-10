@@ -43,12 +43,14 @@ def create_app(test_config=None):
     @app.route('/categories')
     def get_categories():
         # query the DB for all categories
-        categories = Category.query.order_by(Category.type).all()
+        categories = Category.query.all()
+        # format categories
+        formated_categories = [category.format() for category in categories]
 
-        # return in JSON: categories has an ID and Type column
+        # return in JSON w/success and formated list
         return jsonify({
             'success': True,
-            'categories': {category.id: category.type for category in categories}
+            'categories': formated_categories
         })
 
     '''
@@ -65,13 +67,24 @@ def create_app(test_config=None):
   '''
     @app.route('/questions')
     def get_quesitons():
+        # paginate the results by 10
+        page = request.args.get('page', 1, type=int)
+        start = (page - 1) * QUESTIONS_PER_PAGE
+        end = start + 10
         # query the DB for all questions
-        questions = Question.query.order_by(Question.question).all()
-
+        questions = Question.query.all()
+        # query DB for categories
+        categories = Category.query.all()
+        # formated_categories = [category.format() for category in categories]
+        # format questions
+        formated_questions = [question.format() for question in questions]
         # return all questions to JSON
         return jsonify({
             'success': True,
-            'questions': {question.id: question.question for question in questions}
+            'categories': {category.id: category.type for category in categories},
+            'questions': formated_questions[start:end],
+            'total_questions': len(formated_questions),
+            'current_category': None
         })
     '''
   @TODO: 
