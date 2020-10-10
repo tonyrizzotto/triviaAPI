@@ -3,3 +3,7 @@
 
 
 -Needed to alter trivia.psql to reflect a new Owner: postgres (my DB username).
+
+10/10
+- Compelted Get questions and Delete questions.
+  - delete throws an error upon confirmation, but the change still persists in the DB. It is supposed to call getQuestions() on success, but there are no parameters passed, maybe I can fix this error by updating.

@@ -9,6 +9,17 @@ from models import setup_db, Question, Category
 QUESTIONS_PER_PAGE = 10
 
 
+def paginate_ques(request, selection):
+    page = request.args.get('page', 1, type=int)
+    start = (page - 1) * QUESTIONS_PER_PAGE
+    end = start + QUESTIONS_PER_PAGE
+
+    questions = [question.format() for question in selection]
+    current_questions = questions[start:end]
+
+    return current_questions
+
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -53,46 +64,60 @@ def create_app(test_config=None):
             'categories': formated_categories
         })
 
-    '''
-  @TODO: 
-  Create an endpoint to handle GET requests for questions, 
-  including pagination (every 10 questions). 
-  This endpoint should return a list of questions, 
-  number of total questions, current category, categories. 
-    
-  TEST: At this point, when you start the application
-  you should see questions and categories generated,
-  ten questions per page and pagination at the bottom of the screen for three pages.
-  Clicking on the page numbers should update the questions. 
-  '''
+  #   '''
+  # @TODO:
+  # Create an endpoint to handle GET requests for questions,
+  # including pagination (every 10 questions).
+  # This endpoint should return a list of questions,
+  # number of total questions, current category, categories.
+
+  # TEST: At this point, when you start the application
+  # you should see questions and categories generated,
+  # ten questions per page and pagination at the bottom of the screen for three pages.
+  # Clicking on the page numbers should update the questions.
+  # ''' - Done
     @app.route('/questions')
-    def get_quesitons():
-        # paginate the results by 10
-        page = request.args.get('page', 1, type=int)
-        start = (page - 1) * QUESTIONS_PER_PAGE
-        end = start + 10
-        # query the DB for all questions
-        questions = Question.query.all()
-        # query DB for categories
+    def retrieve_questions():
+        selection = Question.query.all()
+        current_questions = paginate_ques(request, selection)
+
         categories = Category.query.all()
-        # formated_categories = [category.format() for category in categories]
-        # format questions
-        formated_questions = [question.format() for question in questions]
-        # return all questions to JSON
+
+        if len(current_questions) == 0:
+            abort(404)
+
         return jsonify({
             'success': True,
+            'questions': current_questions,
+            'total_questions': len(selection),
             'categories': {category.id: category.type for category in categories},
-            'questions': formated_questions[start:end],
-            'total_questions': len(formated_questions),
             'current_category': None
         })
-    '''
-  @TODO: 
-  Create an endpoint to DELETE question using a question ID. 
+  #   '''
+  # @TODO:
+  # Create an endpoint to DELETE question using a question ID.
 
-  TEST: When you click the trash icon next to a question, the question will be removed.
-  This removal will persist in the database and when you refresh the page. 
-  '''
+  # TEST: When you click the trash icon next to a question, the question will be removed.
+  # This removal will persist in the database and when you refresh the page.
+  # ''' - Done
+    @app.route('/questions/<int:questions_id>', methods=['DELETE'])
+    def delete_question(questions_id):
+        # run a try/except with query/by question_id. Use ORM to delete
+        try:
+            question = Question.query.get(questions_id)
+
+            if question is None:
+                abort(404)
+
+            # just call delete. After delete app calls getQuestions() automatically.
+            question.delete()
+
+            return jsonify({
+                'success': True,
+                'deleted': question_id
+            })
+        except:
+            abort(422)
 
     '''
   @TODO: 
