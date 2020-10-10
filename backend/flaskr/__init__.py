@@ -25,7 +25,7 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        return 'Hello World!'
+        return 'Welcome to the Trivia API'
 
   #   '''
   # @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs - Done
@@ -57,13 +57,22 @@ def create_app(test_config=None):
   including pagination (every 10 questions). 
   This endpoint should return a list of questions, 
   number of total questions, current category, categories. 
-
+    
   TEST: At this point, when you start the application
   you should see questions and categories generated,
   ten questions per page and pagination at the bottom of the screen for three pages.
   Clicking on the page numbers should update the questions. 
   '''
+    @app.route('/questions')
+    def get_quesitons():
+        # query the DB for all questions
+        questions = Question.query.order_by(Question.question).all()
 
+        # return all questions to JSON
+        return jsonify({
+            'success': True,
+            'questions': {question.id: question.question for question in questions}
+        })
     '''
   @TODO: 
   Create an endpoint to DELETE question using a question ID. 
