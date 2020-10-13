@@ -7,3 +7,7 @@
 10/10
 - Compelted Get questions and Delete questions.
   - delete throws an error upon confirmation, but the change still persists in the DB. It is supposed to call getQuestions() on success, but there are no parameters passed, maybe I can fix this error by updating.
+
+10/13 
+-added pointer to Links for better UX (Header.css)
+- FormView.js was throwing error - Category type needed to be added to form.
