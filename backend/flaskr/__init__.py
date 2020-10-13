@@ -119,16 +119,16 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    '''
-  @TODO: 
-  Create an endpoint to POST a new question, 
-  which will require the question and answer text, 
-  category, and difficulty score.
+  #   '''
+  # @TODO:
+  # Create an endpoint to POST a new question,
+  # which will require the question and answer text,
+  # category, and difficulty score.
 
-  TEST: When you submit a question on the "Add" tab, 
-  the form will clear and the question will appear at the end of the last page
-  of the questions list in the "List" tab.  
-  '''
+  # TEST: When you submit a question on the "Add" tab,
+  # the form will clear and the question will appear at the end of the last page
+  # of the questions list in the "List" tab.
+  # ''' - done
     # question form returns json of: question, answer, difficulty, category
     @app.route('/questions', methods=["POST"])
     def create_question():
@@ -148,16 +148,16 @@ def create_app(test_config=None):
             })
         except:
             abort(404)
-    '''
-  @TODO: 
-  Create a POST endpoint to get questions based on a search term. 
-  It should return any questions for whom the search term 
-  is a substring of the question. 
+  #   '''
+  # @TODO:
+  # Create a POST endpoint to get questions based on a search term.
+  # It should return any questions for whom the search term
+  # is a substring of the question.
 
-  TEST: Search by any phrase. The questions list will update to include 
-  only question that include that string within their question. 
-  Try using the word "title" to start. 
-  '''
+  # TEST: Search by any phrase. The questions list will update to include
+  # only question that include that string within their question.
+  # Try using the word "title" to start.
+  # ''' - done
 
     @app.route('/search/questions', methods=["POST"])
     def search_question():
@@ -195,6 +195,19 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that 
   category to be shown. 
   '''
+    @app.route('/categories/<int:category_id>/questions')
+    def list_by_category(category_id):
+        try:
+            questions = Question.query.filter_by(
+                category=str(category_id)).all()
+            formatted_questions = [question.format() for question in questions]
+            total_questions = len(formatted_questions)
+            return jsonify({
+                'questions': formatted_questions,
+                'total_questions': total_questions,
+            })
+        except:
+            abort(400)
 
     '''
   @TODO: 
