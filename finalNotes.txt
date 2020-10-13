@@ -11,3 +11,4 @@
 10/13 
 -added pointer to Links for better UX (Header.css)
 - FormView.js was throwing error - Category type needed to be added to form.
+- Created search query. Needed to change url in QuestionView.js
