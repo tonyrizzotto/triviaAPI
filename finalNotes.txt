@@ -13,5 +13,8 @@
 - FormView.js was throwing error - Category type needed to be added to form.
 - Created search query. Needed to change url in QuestionView.js
 - Get categories works. route misspelling corrected.
+
+10/14
 - QuizView.JS was missing categories[id].type.... 
-- play quiz is working. Had create a random question method. 
+- play quiz is working. Had create a random question method. \
+- Updated all docstrings for clarity and updated error handlers.

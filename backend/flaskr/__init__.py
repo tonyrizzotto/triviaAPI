@@ -213,8 +213,9 @@ def create_app(test_config=None):
             formatted_questions = [question.format() for question in questions]
             total_questions = len(formatted_questions)
             return jsonify({
-                'questions': formatted_questions,
-                'total_questions': total_questions,
+                "success": True,
+                "questions": formatted_questions,
+                "total_questions": total_questions,
             })
 
         except:
