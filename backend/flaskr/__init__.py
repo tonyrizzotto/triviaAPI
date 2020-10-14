@@ -9,7 +9,8 @@ from models import setup_db, Question, Category
 QUESTIONS_PER_PAGE = 10
 
 
-def paginate_ques(request, selection):
+def paginate_questions(request, selection):
+    '''A method to paginate questions'''
     page = request.args.get('page', 1, type=int)
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
@@ -34,9 +35,9 @@ def create_app(test_config=None):
                              'GET,PUT,POST,DELETE,OPTIONS')
         return response
 
-    @app.route('/')
-    def index():
-        return 'Welcome to the Trivia API'
+    # @app.route('/')
+    # def index():
+    #     return 'Welcome to the Trivia API'
 
   #   '''
   # @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs - Done
@@ -53,6 +54,7 @@ def create_app(test_config=None):
   # '''
     @app.route('/categories')
     def get_categories():
+        '''This endpoint gets all the categories in the DB.'''
         # query the DB for all categories
         categories = Category.query.all()
         # format categories
@@ -78,8 +80,9 @@ def create_app(test_config=None):
   # ''' - Done
     @app.route('/questions')
     def retrieve_questions():
+        '''This endpoint will retrive all questions.'''
         selection = Question.query.all()
-        current_questions = paginate_ques(request, selection)
+        current_questions = paginate_questions(request, selection)
 
         categories = Category.query.all()
 
@@ -102,6 +105,7 @@ def create_app(test_config=None):
   # ''' - Done
     @app.route('/questions/<int:questions_id>', methods=['DELETE'])
     def delete_question(questions_id):
+        '''This endpoint will allow you to delete a question in the DB'''
         # run a try/except with query/by question_id. Use ORM to delete
         try:
             question = Question.query.get(questions_id)
@@ -132,6 +136,8 @@ def create_app(test_config=None):
     # question form returns json of: question, answer, difficulty, category
     @app.route('/questions', methods=["POST"])
     def create_question():
+        '''This endpoint will allow you to create a new question'''
+
         try:
             body = request.get_json()
 
@@ -161,6 +167,8 @@ def create_app(test_config=None):
 
     @app.route('/search/questions', methods=["POST"])
     def search_question():
+        '''This endpoint enables you to search by a term'''
+
         try:
             content = request.get_json()
 
@@ -197,6 +205,8 @@ def create_app(test_config=None):
   # '''
     @app.route('/categories/<int:category_id>/questions')
     def list_by_category(category_id):
+        '''This endpoint gets questions by category'''
+
         try:
             questions = Question.query.filter_by(
                 category=str(category_id)).all()
@@ -206,20 +216,22 @@ def create_app(test_config=None):
                 'questions': formatted_questions,
                 'total_questions': total_questions,
             })
+
         except:
             abort(400)
 
-    '''
-  @TODO:
-  Create a POST endpoint to get questions to play the quiz.
-  This endpoint should take category and previous question parameters
-  and return a random questions within the given category,
-  if provided, and that is not one of the previous questions.
+#     '''
+#   @TODO:
+#   Create a POST endpoint to get questions to play the quiz.
+#   This endpoint should take category and previous question parameters
+#   and return a random questions within the given category,
+#   if provided, and that is not one of the previous questions.
 
-  TEST: In the "Play" tab, after a user selects "All" or a category,
-  one question at a time is displayed, the user is allowed to answer
-  and shown whether they were correct or not.
-  '''
+#   TEST: In the "Play" tab, after a user selects "All" or a category,
+#   one question at a time is displayed, the user is allowed to answer
+#   and shown whether they were correct or not.
+#   ''' - Done
+
     @app.route('/quizzes', methods=['POST'])
     def play_quiz():
         """This returns a random question to play quiz."""
@@ -245,7 +257,7 @@ def create_app(test_config=None):
         def randomize_questions():
             return questions[random.randint(0, len(questions)-1)]
 
-        # get random question for the next question
+        # randomize next question
         next_question = randomize_questions()
 
         # make sure question has not been called yet.
@@ -261,10 +273,50 @@ def create_app(test_config=None):
             'success': True,
             'question': next_question.format(),
         }), 200
-    '''
-  @TODO:
-  Create error handlers for all expected errors
-  including 404 and 422.
-  '''
+#     '''
+#   @TODO:
+#   Create error handlers for all expected errors
+#   including 404 and 422. - Done
+#   '''
+    # Bad request error (400)
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        '''an error handler for a bad request.'''
+        return jsonify({
+            'success': False,
+            'error': 400,
+            'message': 'There is a bad request error.'
+        }), 400
+
+    # Resource not found (404)
+    @app.errorhandler(404)
+    def not_found(error):
+        '''an error handler for resource not found.'''
+        return jsonify({
+            'success': False,
+            'error': 404,
+            'message': 'Resource can not found.'
+        }), 404
+
+    # Unprocesable entity (422)
+    @app.errorhandler(422)
+    def unprocessable_entity(error):
+        '''an error handler for an unprocessable entity'''
+        return jsonify({
+            'success': False,
+            'error': 422,
+            'message': 'Unprocessable entity. Item could not be deleted.'
+        }), 422
+
+    # Internal server error (500)
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        '''an error handler for an internal service error'''
+        return jsonify({
+            'success': False,
+            'error': 500,
+            'message': 'There is an internal service error. Please try again.'
+        }), 500
 
     return app
