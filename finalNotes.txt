@@ -1,3 +1,21 @@
+To Project Reviewer:
+
+This project took much longer than I thought it would because I wasn't terribly familiar with ReactJS so I needed to learn a bit. A couple things:
+
+The Delete function works, but throws an error after successfully removing the item in the DB. I threw my hands up on this one. 
+
+I found a great deal of small typo's or missing identifiers in the react code, that prevented the UI from rendering in the browser. I was not sure if this was intentional or not, but if it was, it was a painful process of figuring out the error. It was every single route and process. However, it did motiviate me to learn about React. For me, this was the biggest chuck of time.
+
+I would greatly appreciate any feedback on my code writing. I'm teaching myself how to program and it would be helpful if there are any tips for improvement.
+
+Thank you.
+Tony Rizzotto
+
+
+
+
+
+
 10/8 
 - Project did not work unless I removed all version dependencies from the requirements.txt file. Specifically Psycopg2-binary and Werkzeug were producing errors at the desired version
 
