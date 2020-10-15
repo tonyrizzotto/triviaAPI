@@ -110,7 +110,7 @@ For a list of other HTTP request you can visit [HTTPSTATUSDOGS](https://httpstat
 
 # Endpoint Reference
 
-## GET ### /categories
+## GET /categories
 
 - This endpoint will return all available categories
 
@@ -132,7 +132,7 @@ curl http://localhost:5000/categories
     }
 ```
 
-## GET ### /questions
+## GET /questions
 
 - This endpoint will return all available questions in trivia.psql DB file
 
@@ -227,7 +227,7 @@ curl http://localhost:5000/questions
 }
 ```
 
-## DELETE ### /questions/<int:questions_id>
+## DELETE /questions/<int:questions_id>
 
 - This endpoint will allow you do delete a question with the ID from the URL parameter.
 
@@ -235,7 +235,7 @@ curl http://localhost:5000/questions
 curl http://localhost:5000/questions/4 -X DELETE
 ```
 
-## POST ### /questions
+## POST /questions
 
 - This endpoint will allow you to create a new question and submit to a specific category.
 
@@ -243,11 +243,11 @@ curl http://localhost:5000/questions/4 -X DELETE
 curl http://localhost:5000/questions -X POST -H "Content-Type: application/json" -d '{ "question": "What year was the movie 'Inception' released in theaters?", "answer": "2010", "difficulty": 2, "category": "5" }'
 ```
 
-## POST ### /questions/search
+## POST /questions/search
 
 - This endpoint will allow you enter a string to search the database.
 
-## GET ### /categories/<int:category_id>/questions>
+## GET /categories/<int:category_id>/questions>
 
 - This endpoint will allow you to view all questions within a selected category
 
