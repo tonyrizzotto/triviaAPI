@@ -110,9 +110,9 @@ For a list of other HTTP request you can visit [HTTPSTATUSDOGS](https://httpstat
 
 # Endpoint Reference
 
-## Get /categories
+## GET ### /categories
 
-- Returns all available categories
+- This endpoint will return all available categories
 
 ```
 curl http://localhost:5000/categories
@@ -128,9 +128,173 @@ curl http://localhost:5000/categories
             "5": "Entertainment",
             "6": "Sports"
         },
-        "success": true
+        "success": True
     }
 ```
+
+## GET ### /questions
+
+- This endpoint will return all available questions in trivia.psql DB file
+
+```
+curl http://localhost:5000/questions
+```
+
+```
+ {
+    "categories": {
+        "1": "Science",
+        "2": "Art",
+        "3": "Geography",
+        "4": "History",
+        "5": "Entertainment",
+        "6": "Sports"
+    },
+    "questions": [
+        {
+            "answer": "Tom Cruise",
+            "category": 5,
+            "difficulty": 4,
+            "id": 4,
+            "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+        },
+        {
+            "answer": "Maya Angelou",
+            "category": 4,
+            "difficulty": 2,
+            "id": 5,
+            "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+        },
+        {
+            "answer": "Edward Scissorhands",
+            "category": 5,
+            "difficulty": 3,
+            "id": 6,
+            "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+        },
+        {
+            "answer": "Muhammad Ali",
+            "category": 4,
+            "difficulty": 1,
+            "id": 9,
+            "question": "What boxer's original name is Cassius Clay?"
+        },
+        {
+            "answer": "Brazil",
+            "category": 6,
+            "difficulty": 3,
+            "id": 10,
+            "question": "Which is the only team to play in every soccer World Cup tournament?"
+        },
+        {
+            "answer": "Uruguay",
+            "category": 6,
+            "difficulty": 4,
+            "id": 11,
+            "question": "Which country won the first ever soccer World Cup in 1930?"
+        },
+        {
+            "answer": "George Washington Carver",
+            "category": 4,
+            "difficulty": 2,
+            "id": 12,
+            "question": "Who invented Peanut Butter?"
+        },
+        {
+            "answer": "Lake Victoria",
+            "category": 3,
+            "difficulty": 2,
+            "id": 13,
+            "question": "What is the largest lake in Africa?"
+        },
+        {
+            "answer": "The Palace of Versailles",
+            "category": 3,
+            "difficulty": 3,
+            "id": 14,
+            "question": "In which royal palace would you find the Hall of Mirrors?"
+        },
+        {
+            "answer": "Agra",
+            "category": 3,
+            "difficulty": 2,
+            "id": 15,
+            "question": "The Taj Mahal is located in which Indian city?"
+        }
+    ],
+    "success": true,
+    "total_questions": 19
+}
+```
+
+## DELETE ### /questions/<int:questions_id>
+
+- This endpoint will allow you do delete a question with the ID from the URL parameter.
+
+```
+curl http://localhost:5000/questions/4 -X DELETE
+```
+
+## POST ### /questions
+
+- This endpoint will allow you to create a new question and submit to a specific category.
+
+```
+curl http://localhost:5000/questions -X POST -H "Content-Type: application/json" -d '{ "question": "What year was the movie 'Inception' released in theaters?", "answer": "2010", "difficulty": 2, "category": "5" }'
+```
+
+## POST ### /questions/search
+
+- This endpoint will allow you enter a string to search the database.
+
+## GET ### /categories/<int:category_id>/questions>
+
+- This endpoint will allow you to view all questions within a selected category
+
+```
+curl http://localhost:5000/categories/2/questions
+```
+
+```
+{
+  "questions": [
+    {
+      "answer": "Escher",
+      "category": 2,
+      "difficulty": 1,
+      "id": 16,
+      "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+    },
+    {
+      "answer": "Mona Lisa",
+      "category": 2,
+      "difficulty": 3,
+      "id": 17,
+      "question": "La Giaconda is better known as what?"
+    },
+    {
+      "answer": "One",
+      "category": 2,
+      "difficulty": 4,
+      "id": 18,
+      "question": "How many paintings did Van Gogh sell in his lifetime?"
+    },
+    {
+      "answer": "Jackson Pollock",
+      "category": 2,
+      "difficulty": 2,
+      "id": 19,
+      "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+    }
+  ],
+  "success": true,
+  "total_questions": 4
+}
+```
+
+## POST ### /quizzes
+
+- This endpoint will return a random question based on the users selection of category.
 
 ## Testing
 
