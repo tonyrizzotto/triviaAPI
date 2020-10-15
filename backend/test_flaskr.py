@@ -14,8 +14,8 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "trivia_test"
-        self.database_path = "postgres://{}/{}".format(
+        self.database_name = "trivia"
+        self.database_path = "postgres://postgres:root@{}/{}".format(
             'localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
@@ -45,8 +45,8 @@ class TriviaTestCase(unittest.TestCase):
         # assert the response data: success=true, response code, categories and length
         self.assertEqual(data['success'], True)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(data[categories])
-        self.assertTrue(len(data[categories]))
+        self.assertTrue(data['categories'])
+        self.assertTrue(len(data['categories']))
 
     def test_retrieve_questions(self):
         '''Test retrieve_questions'''
@@ -65,17 +65,17 @@ class TriviaTestCase(unittest.TestCase):
         # total_questions should be equal to 'questions'
         self.assertEqual(questions, data['total_questions'])
         self.assertTrue(data['total_questions'])
-        self.assertEqual(0, data['current_category'])
+        self.assertTrue(6, data['current_category'])
 
     def test_delete_questions(self):
         '''Test delete_question by id'''
 
         # make a request and get data
-        response = self.client().get('/questions/6')
+        response = self.client().delete('/questions/6')
         data = json.loads(response.data)
 
-        self.assertEqual(data['success'], True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(response.status_code, 422)
 
     def test_create_question(self):
         '''Test create_question'''
@@ -90,9 +90,9 @@ class TriviaTestCase(unittest.TestCase):
     def test_search_questions(self):
         '''Test search_questions'''
 
-        # make a request and get data. Include a searchTerm that won't be found
-        response = self.client().get('/search/questions',
-                                     json={'searchTerm': 'zyz'})
+        # make a request and get data. Include a searchTerm that won't be found. use client.post
+        response = self.client().post('/search/questions',
+                                      json={'searchTerm': 'abc'})
         data = json.loads(response.data)
 
         # test for success, length of total_questions, questions and current category
@@ -102,7 +102,7 @@ class TriviaTestCase(unittest.TestCase):
         # make sure length of questions found = 0
         self.assertEqual(len(data['questions']), 0)
 
-        self.assertEqual(data['current_category'])
+        self.assertTrue(6, data['current_category'])
 
     def test_list_by_category(self):
         '''Test list_by_category. Should search by ID'''
@@ -114,12 +114,30 @@ class TriviaTestCase(unittest.TestCase):
         # test for success, questions, total questions
         self.assertEqual(data['success'], True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['total_questions'])
+        # 4 questions in category 2 as of now
+        self.assertEqual(4, data['total_questions'])
         # questions should not be equal to 0
         self.assertNotEqual(len(data['questions']), 0)
 
     def test_play_quiz(self):
-        '''Test play_quiz'''
+        '''Test play_quiz
+            To test this properly, you must run a client().post into the response
+        '''
+        test_data = {
+            'previous_questions': [5, 9],
+            'quiz_category': {
+                'type': 'Sports',
+                'id': 6
+            }
+        }
+        # make a request and get the data
+        response = self.client().post('/quizzes', json=test_data)
+        data = json.loads(response.data)
+
+        # test for success, question and response
+        self.assertEqual(data['success'], True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(data['question'])
 
 
 # Make the tests conveniently executable
