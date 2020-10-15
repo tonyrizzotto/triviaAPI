@@ -88,7 +88,7 @@ GET '/categories'
 
 ```
 
-### API Endpoint Reference
+# API Endpoint Reference
 
 ## Getting Started
 
@@ -108,14 +108,28 @@ Returned error codes include:
 
 For a list of other HTTP request you can visit [HTTPSTATUSDOGS](https://httpstatusdogs.com)
 
-## Endpoint Reference
+# Endpoint Reference
 
-# Get /categories
+## Get /categories
 
 - Returns all available categories
 
 ```
 curl http://localhost:5000/categories
+```
+
+```
+    {
+        "categories": {
+            "1": "Science",
+            "2": "Art",
+            "3": "Geography",
+            "4": "History",
+            "5": "Entertainment",
+            "6": "Sports"
+        },
+        "success": true
+    }
 ```
 
 ## Testing
